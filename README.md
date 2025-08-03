@@ -1,4 +1,4 @@
-# Android device tree for duyaya Y1 (Y1)
+# Android device tree for EEBBK S1S (S1S)
 
 ```
 #

@@ -1,5 +1,5 @@
-dalvik.vm.heapgrowthlimit=128m
-dalvik.vm.heapsize=256m
+dalvik.vm.heapgrowthlimit=92m
+dalvik.vm.heapsize=196m
 dalvik.vm.lockprof.threshold=500
 dalvik.vm.stack-trace-dir=/data/anr
 dalvik.vm.systemservercompilerfilter=speed-profile
@@ -19,7 +19,7 @@ ro.boot.rotation_after_logo=0
 ro.boot.selinux=disable
 ro.camera.sound.forced=0
 ro.config.media_vol_default=12
-ro.expect.recovery_id=0x99434164588874b1a16df6834718b219d6e05575000000000000000000000000
+ro.expect.recovery_id=0x1da0bcfde4e4c950fc6463109b827c40c55be62c000000000000000000000000
 ro.kernel.zio=38,108,105,16
 ro.mediatek.wlan.p2p=1
 ro.mediatek.wlan.wsc=1

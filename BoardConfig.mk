@@ -4,9 +4,16 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-DEVICE_PATH := device/duyaya/Y1
+DEVICE_PATH := device/EEBBK/S1S
 
 # Architecture
+TARGET_ARCH := arm64
+TARGET_ARCH_VARIANT := armv8-a
+TARGET_CPU_ABI := arm64-v8a
+TARGET_CPU_ABI2 := 
+TARGET_CPU_VARIANT := generic
+TARGET_CPU_VARIANT_RUNTIME := generic
+
 TARGET_ARCH := arm
 TARGET_ARCH_VARIANT := armv7-a-neon
 TARGET_CPU_ABI := armeabi-v7a
@@ -30,8 +37,8 @@ BOARD_KERNEL_BASE := 0x40000000
 BOARD_KERNEL_CMDLINE := bootopt=64S3,32N2,32N2 buildvariant=user
 BOARD_KERNEL_PAGESIZE := 2048
 BOARD_KERNEL_IMAGE_NAME := Image
-TARGET_KERNEL_CONFIG := Y1_defconfig
-TARGET_KERNEL_SOURCE := kernel/duyaya/Y1
+TARGET_KERNEL_CONFIG := S1S_defconfig
+TARGET_KERNEL_SOURCE := kernel/EEBBK/S1S
 
 # Kernel - prebuilt
 TARGET_FORCE_PREBUILT_KERNEL := true
@@ -41,7 +48,7 @@ endif
 
 # Partitions
 BOARD_FLASH_BLOCK_SIZE := 131072 # (BOARD_KERNEL_PAGESIZE * 64)
-BOARD_BOOTIMAGE_PARTITION_SIZE := 8134656
+BOARD_BOOTIMAGE_PARTITION_SIZE := 16777216
 BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16777216
 
 # Platform
@@ -63,4 +70,4 @@ VENDOR_SECURITY_PATCH := 2019-03-05
 DEVICE_MANIFEST_FILE += $(DEVICE_PATH)/manifest.xml
 
 # Inherit the proprietary files
-include vendor/duyaya/Y1/BoardConfigVendor.mk
+include vendor/EEBBK/S1S/BoardConfigVendor.mk

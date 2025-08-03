@@ -28,12 +28,17 @@ PRODUCT_PACKAGES += \
     factory_init.project.rc \
     factory_init.rc \
     init.aee.rc \
+    init.common_svc.rc \
     init.connectivity.rc \
+    init.environ.rc \
     init.modem.rc \
     init.mt8167.rc \
     init.mt8167.usb.rc \
     init.project.rc \
+    init.rilproxy.rc \
     init.sensor_1_0.rc \
+    init.usb.configfs.rc \
+    init.usb.rc \
     meta_init.connectivity.rc \
     meta_init.modem.rc \
     meta_init.project.rc \
@@ -42,10 +47,11 @@ PRODUCT_PACKAGES += \
     init.rc \
     init.recovery.mt8167.rc \
     ueventd.rc \
+    ueventd.mt8167.rc \
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
     $(LOCAL_PATH)
 
 # Inherit the proprietary files
-$(call inherit-product, vendor/duyaya/Y1/Y1-vendor.mk)
+$(call inherit-product, vendor/EEBBK/S1S/S1S-vendor.mk)
