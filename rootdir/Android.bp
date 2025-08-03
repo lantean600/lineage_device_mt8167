@@ -111,6 +111,55 @@ prebuilt_etc {
     vendor: true,
 }
 
+prebuilt_etc {
+    name: "init.common_svc.rc",
+    src: "etc/init.common_svc.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.environ.rc",
+    src: "etc/init.environ.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.rilproxy.rc",
+    src: "etc/init.rilproxy.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.usb.configfs.rc",
+    src: "etc/init.usb.configfs.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "init.usb.rc",
+    src: "etc/init.usb.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "ueventd.mt8167.rc",
+    src: "etc/ueventd.mt8167.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
+prebuilt_etc {
+    name: "factory_init.project.rc",
+    src: "etc/factory_init.project.rc",
+    sub_dir: "init/hw",
+    vendor: true,
+}
+
 // fstab
 prebuilt_etc {
     name: "fstab.mt8167",
