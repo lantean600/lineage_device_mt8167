@@ -1,0 +1,153 @@
+name: Build LineageOS ROM
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      SYNC_URL:
+        description: 'SYNC_URL'
+        required: true
+        default: 'https://github.com/LineageOS/android.git'
+      MANIFEST_BRANCH:
+        description: 'MANIFEST_BRANCH'
+        required: true
+        default: 'lineage-16.0'
+      DEVICE_TREE_URL:
+        description: 'DEVICE_TREE_URL'
+        required: true
+        default: 'https://github.com/XingKongTanSuo/android_device_bbkedu_H7000'
+      DEVICE_TREE_BRANCH:
+        description: 'DEVICE_TREE_BRANCH'
+        required: true
+        default: 'staging/lineage-16.0'
+      DEVICE_PATH:
+        description: 'DEVICE_PATH'
+        required: true
+        default: 'device/bbkedu/H7000'
+      VENDOR_BLOBS_URL:
+        description: 'VENDOR_BLOBS_URL'
+        required: false
+        default: 'https://github.com/XingKongTanSuo/android_vendor_bbkedu_H7000'
+      VENDOR_BRANCH:
+        description: 'VENDOR_BRANCH'
+        required: false
+        default: 'lineage-16.0'
+      VENDOR_PATH:
+        description: 'VENDOR_PATH'
+        required: true
+        default: 'vendor/bbkedu/H7000'
+      DEVICE_NAME:
+        description: 'DEVICE_NAME'
+        required: true
+        default: 'H7000'
+      MAKEFILE_NAME:
+        description: 'MAKEFILE_NAME'
+        required: true
+        default: 'lineage_H7000'
+
+jobs:
+  build-lineageos:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+    - name: Check if sender is repository owner
+      if: github.event.repository.owner.login == github.event.sender.login
+      run: |
+        echo "Sender is the repository owner"
+    - name: Not the repository owner
+      if: github.event.repository.owner.login != github.event.sender.login
+      run: |
+        echo "Sender is not the repository owner"
+        exit 1
+
+    - name: Cleanup
+      uses: rokibhasansagar/slimhub_actions@main
+
+    - name: Initialize workspace
+      run: |
+        mkdir workspace
+        cd workspace
+        echo "workspace-folder=$(pwd)" >> $GITHUB_OUTPUT
+      id: pwd
+
+    - name: Prepare the build environment
+      run: |
+        sudo apt install git aria2 -y
+        git clone https://gitlab.com/OrangeFox/misc/scripts
+        cd scripts
+        sudo bash setup/android_build_env.sh
+        sed -i 's/cd -/cd ../g' setup/install_android_sdk.sh
+        sudo bash setup/install_android_sdk.sh
+        sudo apt-get install git-core gnupg flex bison build-essential zip curl zlib1g-dev libc6-dev-i386 x11proto-core-dev libx11-dev lib32z1-dev libxml2-utils xsltproc unzip fontconfig repo libncurses5 -y
+        export JAVA_HOME=$(readlink -f $(which java))
+        mkdir ${{ steps.pwd.outputs.workspace-folder }}/ccache
+        export USE_CCACHE=1
+        export CCACHE_DIR=${{ steps.pwd.outputs.workspace-folder }}/ccache/
+        ccache -M 50G
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+      continue-on-error: true
+
+    - name: Clone and sync Lineage sources
+      run: |
+        cd ${{ steps.pwd.outputs.workspace-folder }}
+        mkdir lineage
+        cd lineage
+        repo init -u ${{ github.event.inputs.SYNC_URL }} -b ${{ github.event.inputs.MANIFEST_BRANCH }} --depth=1
+        repo sync
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+
+    - name: Clone device tree
+      run: |
+        cd ${{ steps.pwd.outputs.workspace-folder }}/lineage/
+        git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
+        git clone ${{ github.event.inputs.VENDOR_BLOBS_URL }} -b ${{ github.event.inputs.VENDOR_BRANCH }} ./${{ github.event.inputs.VENDOR_PATH }}
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+
+    - name: Set Swap Space
+      uses: pierotofy/set-swap-space@master
+      with:
+        swap-size-gb: 12
+        
+    - name: Switch to Python2
+      run: |
+        sudo add-apt-repository universe -y
+        sudo apt update
+        sudo apt install -y python2
+        sudo ln -sf /usr/bin/python2 /usr/bin/python
+      continue-on-error: true
+
+    - name: Build Lineage ROM
+      run: |
+        cd ${{ steps.pwd.outputs.workspace-folder }}/lineage/
+        . build/envsetup.sh
+        export USE_CCACHE=1
+        export CCACHE_DIR=ccache/
+        ccache -M 50G
+        lunch ${{ github.event.inputs.MAKEFILE_NAME }}
+        m otapackage
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+      continue-on-error: true
+
+    - name: Check the output directory before uploading
+      run: |
+        ls -al ${{ steps.pwd.outputs.workspace-folder }}/lineage/out/target/product/
+        echo
+        ls -al ${{ steps.pwd.outputs.workspace-folder }}/lineage/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/
+      continue-on-error: true
+
+    - name: Upload to Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ${{ steps.pwd.outputs.workspace-folder }}/lineage/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/*.zip
+        name: ${{ github.event.inputs.DEVICE_NAME }}-${{ github.run_id }}
+        tag_name: ${{ github.run_id }}
+        body: |
+          Manifest: ${{ github.event.inputs.MANIFEST_BRANCH }}
+          Device: ${{ github.event.inputs.DEVICE_NAME }}
+          Target: ${{ github.event.inputs.BUILD_TARGET }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      continue-on-error: true
+        
