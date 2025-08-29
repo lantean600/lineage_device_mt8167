@@ -1,15 +1,19 @@
 # MTK project .rc configure
 
+import init.mt8167.usb.rc
 
 on init
     mount tmpfs tmpfs /mnt/media_rw/ mode=0755,uid=1000,gid=1000
     mkdir /mnt/media_rw/usbotg 0700 media_rw media_rw
     mkdir /storage/usbotg 0700 root root
     mount tmpfs tmpfs /storage/usbotg mode=0755,uid=1000,gid=1000
+    mkdir /persist 0771 system system
 
 on post-fs-data
-
-
+    insmod /system/lib/modules/texfat.ko
+    insmod /system/lib/modules/tntfs.ko
+# We restorecon /persist to set SEPolicy label.
+    restorecon /persist
 
 
 
@@ -47,8 +51,8 @@ on post-fs-data
     chown system system /proc/smb/ScreenComm
     chmod 0660 /proc/smb/ScreenComm
 
-#Set mlock resource to unlimited
-    setrlimit 8 4294967295 4294967295
+
+
 
 #Define device for ATCID
     chmod 660 /dev/ttyGS0
@@ -73,5 +77,40 @@ on init
 service fuse_usbotg /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usbotg /storage/usbotg
     class late_start
     disabled
+
+
+service atci_service /vendor/bin/atci_service
+	socket atci-service stream 660 radio system
+	socket atci-serv-fw stream 660 radio system
+	user root
+        disabled
+	group radio system
+service atcid-daemon-u /vendor/bin/atcid
+	user system
+	group radio system media
+	disabled
+	oneshot
+
+service atcid-daemon-e /vendor/bin/atcid
+	user root
+	group radio system
+	disabled
+	oneshot
+
+on early_property:ro.build.type=eng
+start atci_service
+start atcid-daemon-e
+service audio-daemon /vendor/bin/audiocmdservice_atci
+    class main
+    socket atci-audio stream 660 media system
+    user media
+    group nvram media system sdcard_rw
+    disabled
+    oneshot
+
+
+
+
+
 
 

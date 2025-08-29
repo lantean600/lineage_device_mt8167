@@ -20,8 +20,8 @@ on post-fs-data
 #SeLinux
     mkdir /data/ccci_cfg 0700 system radio
     restorecon /data/ccci_cfg
-    restorecon_recursive /vendor/protect_f
-    restorecon_recursive /vendor/protect_s
+    restorecon_recursive /protect_f
+    restorecon_recursive /protect_s
     
     # Encrypt phone function
     setprop vold.post_fs_data_done 1

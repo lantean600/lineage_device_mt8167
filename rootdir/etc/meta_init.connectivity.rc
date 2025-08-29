@@ -11,6 +11,8 @@ on post-fs-data
 #GPS
     mkdir /data/gps_mnl 0771 gps system
     mkdir /data/misc/gps 0770 gps system
+    chown gps system /data/mpe_mnl
+    chmod 0775 /vendor/xbin/MPED
 
 # GPS EMI
     chmod 666 /dev/gps_emi
@@ -42,6 +44,12 @@ service wmt_launcher /vendor/bin/wmt_launcher -p /vendor/firmware/
 #    group gps inet misc sdcard_rw sdcard_r media_rw system radio
 #    socket mnld stream 660 gps system
 
+service MPED /vendor/bin/MPED
+    class main
+    user gps
+    group gps inet misc sdcard_rw sdcard_r media_rw system
+    socket MPED stream 660 gps system
+
 #service BGW /vendor/bin/BGW
 #    user system
 #    group gps system radio
@@ -50,36 +58,4 @@ service wmt_launcher /vendor/bin/wmt_launcher -p /vendor/firmware/
 #
 # Connectivity related services (End)
 #
-
-#
-# Connectivity related kernel objects (Begin)
-#
-
-# load wmt_drv
-on boot
-    insmod /vendor/lib/modules/wmt_drv.ko
-
-# load bt_drv
-on property:service.wcn.driver.ready=yes
-    insmod /vendor/lib/modules/bt_drv.ko
-
-# load wifi chrdev driver and wlan driver after wmt_loader finish
-on property:service.wcn.driver.ready=yes
-    insmod /vendor/lib/modules/wmt_chrdev_wifi.ko
-    insmod /vendor/lib/modules/wlan_drv_${ro.wlan.gen}.ko
-
-# load fmradio_drv
-on property:service.wcn.driver.ready=yes
-    insmod /vendor/lib/modules/fmradio_drv.ko
-    setprop fmradio_drv.ko 1
-
-# load gps_drv
-on property:service.wcn.driver.ready=yes
-  insmod /vendor/lib/modules/gps_drv.ko
-  setprop gps_drv.ko 1
-
-#
-# Connectivity related kernel objects (End)
-#
-
 #INTERNAL_END
