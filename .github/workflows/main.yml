@@ -15,35 +15,35 @@ on:
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
-        default: 'https://github.com/XingKongTanSuo/android_device_bbkedu_H7000'
+        default: 'https://github.com/XingKongTanSuo/lineage_device_mt8167'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: true
-        default: 'staging/lineage-16.0'
+        default: 'lineage-S1S'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: true
-        default: 'device/bbkedu/H7000'
+        default: 'device/EEBBK/S1S'
       VENDOR_BLOBS_URL:
         description: 'VENDOR_BLOBS_URL'
         required: false
-        default: 'https://github.com/XingKongTanSuo/android_vendor_bbkedu_H7000'
+        default: 'your_vendor_tree_url'
       VENDOR_BRANCH:
         description: 'VENDOR_BRANCH'
         required: false
-        default: 'lineage-16.0'
+        default: 'lineage-S1S'
       VENDOR_PATH:
         description: 'VENDOR_PATH'
         required: true
-        default: 'vendor/bbkedu/H7000'
+        default: 'vendor/EEBBK/S1S'
       DEVICE_NAME:
         description: 'DEVICE_NAME'
         required: true
-        default: 'H7000'
+        default: 'S1S'
       MAKEFILE_NAME:
         description: 'MAKEFILE_NAME'
         required: true
-        default: 'lineage_H7000'
+        default: 'lineage_S1S-userdebug'
 
 jobs:
   build-lineageos:
