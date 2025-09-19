@@ -5,6 +5,6 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-add_lunch_combo lineage_S1S-user \
-add_lunch_combo lineage_S1S-userdebug \
-add_lunch_combo lineage_S1S-eng
+add_lunch_combo S1S-user \
+add_lunch_combo S1S-userdebug \
+add_lunch_combo S1S-eng
