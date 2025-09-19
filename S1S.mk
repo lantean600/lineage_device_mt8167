@@ -14,7 +14,7 @@ $(call inherit-product, vendor/lineage/config/common_full_phone.mk)
 $(call inherit-product, device/EEBBK/S1S/device.mk)
 
 PRODUCT_DEVICE := S1S
-PRODUCT_NAME := lineage_S1S
+PRODUCT_NAME := S1S
 PRODUCT_BRAND := EEBBK
 PRODUCT_MODEL := S1S
 PRODUCT_MANUFACTURER := EEBBK
