@@ -83,7 +83,6 @@ jobs:
         sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
         sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/javac
         export JAVA_HOME=$(readlink -f $(which java))
-        export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
         mkdir ${{ steps.pwd.outputs.workspace-folder }}/ccache
         export USE_CCACHE=1
         export CCACHE_DIR=${{ steps.pwd.outputs.workspace-folder }}/ccache/
@@ -137,7 +136,7 @@ jobs:
         export CCACHE_DIR=ccache/
         ccache -M 50G
         lunch ${{ github.event.inputs.MAKEFILE_NAME }}
-        m otapackage
+        m -j16
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       continue-on-error: true
 
