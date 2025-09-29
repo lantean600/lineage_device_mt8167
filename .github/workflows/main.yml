@@ -11,7 +11,7 @@ on:
       MANIFEST_BRANCH:
         description: 'MANIFEST_BRANCH'
         required: true
-        default: 'lineage-16.0'
+        default: 'cm-14.1'
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
@@ -94,7 +94,7 @@ jobs:
         mkdir lineage
         cd lineage
         repo init -u ${{ github.event.inputs.SYNC_URL }} -b ${{ github.event.inputs.MANIFEST_BRANCH }} --depth=1
-        repo sync
+        repo sync -c -j16
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Clone device tree
