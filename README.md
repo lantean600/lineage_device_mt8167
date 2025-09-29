@@ -1,4 +1,4 @@
-# Android device tree for EEBBK S1Pro (S1S)
+# Android device tree for EEBBK S1Pro (S1S)，本存储库已废弃
 
 ```
 #
