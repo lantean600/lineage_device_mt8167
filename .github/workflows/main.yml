@@ -15,11 +15,11 @@ on:
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
-        default: 'https://github.com/XingKongTanSuo/lineage_device_mt8167'
+        default: 'https://gitee.com/xinkontans/lineage_device_mt8167.git'
       DEVICE_TREE_BRANCH:
         description: 'DEVICE_TREE_BRANCH'
         required: true
-        default: 'lineage-S1S'
+        default: 'master'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: true
@@ -27,11 +27,11 @@ on:
       VENDOR_BLOBS_URL:
         description: 'VENDOR_BLOBS_URL'
         required: false
-        default: 'your_vendor_tree_url'
+        default: 'https://gitee.com/xinkontans/android_vendor_EEBBK_S1S.git'
       VENDOR_BRANCH:
         description: 'VENDOR_BRANCH'
         required: false
-        default: 'lineage-S1S'
+        default: 'cm-14.1'
       VENDOR_PATH:
         description: 'VENDOR_PATH'
         required: true
