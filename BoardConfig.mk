@@ -6,6 +6,9 @@
 
 DEVICE_PATH := device/EEBBK/S1S
 
+# Export kernel vars to soong (required by LOS lineage_generator)
+-include vendor/lineage/config/BoardConfigSoong.mk
+
 # Architecture
 TARGET_ARCH := arm64
 TARGET_ARCH_VARIANT := armv8-a
