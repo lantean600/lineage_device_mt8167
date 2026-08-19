@@ -40,6 +40,11 @@ BOARD_KERNEL_IMAGE_NAME := Image
 TARGET_KERNEL_CONFIG := S1S_defconfig
 TARGET_KERNEL_SOURCE := kernel/EEBBK/S1S
 
+# Kernel vars required by LOS16 lineage_generator (prebuilt kernel: not built, only registered)
+KERNEL_MAKE_FLAGS := -j8
+KERNEL_ARCH := arm
+KERNEL_CROSS_COMPILE := arm-linux-androideabi-
+
 # Kernel - prebuilt
 TARGET_FORCE_PREBUILT_KERNEL := true
 ifeq ($(TARGET_FORCE_PREBUILT_KERNEL),true)
