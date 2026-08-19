@@ -55,3 +55,16 @@ PRODUCT_SOONG_NAMESPACES += \
 
 # Inherit the proprietary files
 $(call inherit-product, vendor/EEBBK/S1S/S1S-vendor.mk)
+
+# Android 9 forbids APKs in PRODUCT_COPY_FILES; they are installed via BUILD_PREBUILT
+# modules defined in rootdir/Android.mk (mediatek-res, FwkPlugin, DataProtection,
+# MTKLogger, MTKThermalManager).
+PRODUCT_COPY_FILES := $(filter-out %.apk:%,$(PRODUCT_COPY_FILES))
+
+# Pull in the prebuilt modules for those APKs
+PRODUCT_PACKAGES += \
+    mediatek-res \
+    FwkPlugin \
+    DataProtection \
+    MTKLogger \
+    MTKThermalManager
