@@ -140,12 +140,12 @@ jobs:
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       continue-on-error: true
 
-    - name: Check the output directory before uploading
+    - name: Check build output (fail if no ROM zip)
       run: |
-        ls -al ${{ steps.pwd.outputs.workspace-folder }}/lineage/out/target/product/
-        echo
-        ls -al ${{ steps.pwd.outputs.workspace-folder }}/lineage/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/
-      continue-on-error: true
+        cd ${{ steps.pwd.outputs.workspace-folder }}/lineage/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/
+        ls -al
+        if ls *.zip >/dev/null 2>&1; then echo "ROM zip found:"; ls *.zip; else echo "NO ROM ZIP - build failed"; exit 1; fi
+      continue-on-error: false
 
     - name: Upload to Release
       uses: softprops/action-gh-release@v1
