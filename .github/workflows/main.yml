@@ -113,6 +113,9 @@ jobs:
         cd ${{ steps.pwd.outputs.workspace-folder }}/lineage/
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
         git clone ${{ github.event.inputs.VENDOR_BLOBS_URL }} -b ${{ github.event.inputs.VENDOR_BRANCH }} ./${{ github.event.inputs.VENDOR_PATH }}
+        # Merge proprietary blobs from gitee mirror (VENDOR_BLOBS_URL hosts patched mks only)
+        git clone https://gitee.com/xinkontans/android_vendor_EEBBK_S1S.git -b cm-14.1 /tmp/vendor_full || true
+        if [ -d /tmp/vendor_full/proprietary ]; then cp -r /tmp/vendor_full/proprietary ./${{ github.event.inputs.VENDOR_PATH }}/; echo "proprietary merged"; fi
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Set Swap Space
