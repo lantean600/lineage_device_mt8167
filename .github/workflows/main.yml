@@ -11,7 +11,7 @@ on:
       MANIFEST_BRANCH:
         description: 'MANIFEST_BRANCH'
         required: true
-        default: 'cm-14.1'
+        default: 'lineage-16.0'
       DEVICE_TREE_URL:
         description: 'DEVICE_TREE_URL'
         required: true
@@ -93,8 +93,8 @@ jobs:
     - name: Set up JDK 8
       uses: actions/setup-java@v3
       with:
-        java-version: '8'
-        distribution: 'adopt'
+        java-version: '9'
+        distribution: 'zulu'
         
     - name: Check Java version
       run: java -version
@@ -131,16 +131,6 @@ jobs:
     - name: Build Lineage ROM
       run: |
         cd ${{ steps.pwd.outputs.workspace-folder }}/lineage/
-        # 修复 Jack Server
-        rm -rf ~/.jack-server
-        prebuilts/sdk/tools/jack-admin install-server \
-        prebuilts/sdk/tools/jack-launcher.jar \
-        prebuilts/sdk/tools/jack-server-4.8.ALPHA.jar 
-        keytool -importkeystore -srckeystore ~/.jack-server/server.jks \
-        -destkeystore ~/.jack-server/server.jks -deststoretype pkcs12 -noprompt -srcstorepass "" -deststorepass ""
-        JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4g" \
-        prebuilts/sdk/tools/jack-admin start-server
-    
         . build/envsetup.sh
         export USE_CCACHE=1
         export CCACHE_DIR=ccache/
