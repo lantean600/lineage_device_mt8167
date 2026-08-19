@@ -116,6 +116,8 @@ jobs:
         # Merge proprietary blobs from gitee mirror (VENDOR_BLOBS_URL hosts patched mks only)
         git clone https://gitee.com/xinkontans/android_vendor_EEBBK_S1S.git -b cm-14.1 /tmp/vendor_full || true
         if [ -d /tmp/vendor_full/proprietary ]; then cp -r /tmp/vendor_full/proprietary ./${{ github.event.inputs.VENDOR_PATH }}/; echo "proprietary merged"; fi
+        # LOS16 manifest comments out prebuilts/lineage-sdk, but checkpublicapi needs it
+        git clone -b lineage-16.0 --depth 1 https://github.com/LineageOS/android_prebuilts_lineage-sdk.git prebuilts/lineage-sdk || true
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Set Swap Space
