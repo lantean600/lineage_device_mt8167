@@ -30,7 +30,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE       := mediatek-res
 LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
-LOCAL_SRC_FILES    := ../../../vendor/EEBBK/S1S/proprietary/vendor/framework/mediatek-res/mediatek-res.apk
+LOCAL_SRC_FILES    := ../../../../vendor/EEBBK/S1S/proprietary/vendor/framework/mediatek-res/mediatek-res.apk
 LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/framework/mediatek-res
 include $(BUILD_PREBUILT)
 
@@ -38,7 +38,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE       := FwkPlugin
 LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
-LOCAL_SRC_FILES    := ../../../vendor/EEBBK/S1S/proprietary/vendor/plugin/FwkPlugin/FwkPlugin.apk
+LOCAL_SRC_FILES    := ../../../../vendor/EEBBK/S1S/proprietary/vendor/plugin/FwkPlugin/FwkPlugin.apk
 LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/plugin
 include $(BUILD_PREBUILT)
 
@@ -46,7 +46,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE       := DataProtection
 LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
-LOCAL_SRC_FILES    := ../../../vendor/EEBBK/S1S/proprietary/vendor/plugin/DataProtection/DataProtection.apk
+LOCAL_SRC_FILES    := ../../../../vendor/EEBBK/S1S/proprietary/vendor/plugin/DataProtection/DataProtection.apk
 LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/plugin
 include $(BUILD_PREBUILT)
 
@@ -54,7 +54,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE       := MTKLogger
 LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
-LOCAL_SRC_FILES    := ../../../vendor/EEBBK/S1S/proprietary/vendor/app/MTKLogger/MTKLogger.apk
+LOCAL_SRC_FILES    := ../../../../vendor/EEBBK/S1S/proprietary/vendor/app/MTKLogger/MTKLogger.apk
 LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/app
 include $(BUILD_PREBUILT)
 
@@ -62,7 +62,7 @@ include $(CLEAR_VARS)
 LOCAL_MODULE       := MTKThermalManager
 LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
-LOCAL_SRC_FILES    := ../../../vendor/EEBBK/S1S/proprietary/vendor/app/MTKThermalManager/MTKThermalManager.apk
+LOCAL_SRC_FILES    := ../../../../vendor/EEBBK/S1S/proprietary/vendor/app/MTKThermalManager/MTKThermalManager.apk
 LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/app
 include $(BUILD_PREBUILT)
 
