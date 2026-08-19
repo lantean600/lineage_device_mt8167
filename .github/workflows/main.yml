@@ -82,10 +82,7 @@ jobs:
         sudo bash setup/android_build_env.sh
         sed -i 's/cd -/cd ../g' setup/install_android_sdk.sh
         sudo bash setup/install_android_sdk.sh
-        sudo apt-get install git-core gnupg flex bison build-essential zip curl zlib1g-dev libc6-dev-i386 x11proto-core-dev libx11-dev lib32z1-dev libxml2-utils xsltproc unzip fontconfig repo libncurses5 openjdk-8-jdk -y
-        sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java
-        sudo update-alternatives --set java /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/javac
-        export JAVA_HOME=$(readlink -f $(which java))
+        sudo apt-get install git-core gnupg flex bison build-essential zip curl zlib1g-dev libc6-dev-i386 x11proto-core-dev libx11-dev lib32z1-dev libxml2-utils xsltproc unzip fontconfig repo libncurses5 -y
         mkdir ${{ steps.pwd.outputs.workspace-folder }}/ccache
         export USE_CCACHE=1
         export CCACHE_DIR=${{ steps.pwd.outputs.workspace-folder }}/ccache/
@@ -134,16 +131,14 @@ jobs:
     - name: Build Lineage ROM
       run: |
         cd ${{ steps.pwd.outputs.workspace-folder }}/lineage/
-        # 修复 Jack Server
-        rm -rf ~/.jack-server
+        # 修复 Jack Server（setup-java 提供 JDK8；跳过脆弱的 keytool jks 转换）
+        rm -rf ~/.jack-server || true
         prebuilts/sdk/tools/jack-admin install-server \
         prebuilts/sdk/tools/jack-launcher.jar \
-        prebuilts/sdk/tools/jack-server-4.8.ALPHA.jar 
-        keytool -importkeystore -srckeystore ~/.jack-server/server.jks \
-        -destkeystore ~/.jack-server/server.jks -deststoretype pkcs12 -noprompt -srcstorepass "" -deststorepass ""
+        prebuilts/sdk/tools/jack-server-4.8.ALPHA.jar || true
         JACK_SERVER_VM_ARGUMENTS="-Dfile.encoding=UTF-8 -XX:+TieredCompilation -Xmx4g" \
-        prebuilts/sdk/tools/jack-admin start-server
-    
+        prebuilts/sdk/tools/jack-admin start-server || true
+
         . build/envsetup.sh
         export USE_CCACHE=1
         export CCACHE_DIR=ccache/
@@ -153,12 +148,12 @@ jobs:
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       continue-on-error: true
 
-    - name: Check the output directory before uploading
+    - name: Check build output (fail if no ROM zip)
       run: |
-        ls -al ${{ steps.pwd.outputs.workspace-folder }}/lineage/out/target/product/
-        echo
-        ls -al ${{ steps.pwd.outputs.workspace-folder }}/lineage/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/
-      continue-on-error: true
+        cd ${{ steps.pwd.outputs.workspace-folder }}/lineage/out/target/product/${{ github.event.inputs.DEVICE_NAME }}/
+        ls -al
+        if ls *.zip >/dev/null 2>&1; then echo "ROM zip found:"; ls *.zip; else echo "NO ROM ZIP - build failed"; exit 1; fi
+      continue-on-error: false
 
     - name: Upload to Release
       uses: softprops/action-gh-release@v1
