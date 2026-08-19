@@ -26,6 +26,8 @@ LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)
 include $(BUILD_PREBUILT)
 
 # Vendor APKs (Android 9 forbids APKs in PRODUCT_COPY_FILES -> BUILD_PREBUILT)
+# Paths mirror the original PRODUCT_COPY_FILES destinations.
+
 include $(CLEAR_VARS)
 LOCAL_MODULE       := mediatek-res
 LOCAL_MODULE_TAGS  := optional
@@ -39,7 +41,7 @@ LOCAL_MODULE       := FwkPlugin
 LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
 LOCAL_SRC_FILES    := ../../../../vendor/EEBBK/S1S/proprietary/vendor/plugin/FwkPlugin/FwkPlugin.apk
-LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/plugin
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/plugin/FwkPlugin
 include $(BUILD_PREBUILT)
 
 include $(CLEAR_VARS)
@@ -47,7 +49,7 @@ LOCAL_MODULE       := DataProtection
 LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
 LOCAL_SRC_FILES    := ../../../../vendor/EEBBK/S1S/proprietary/vendor/plugin/DataProtection/DataProtection.apk
-LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/plugin
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/plugin/DataProtection
 include $(BUILD_PREBUILT)
 
 include $(CLEAR_VARS)
@@ -55,7 +57,7 @@ LOCAL_MODULE       := MTKLogger
 LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
 LOCAL_SRC_FILES    := ../../../../vendor/EEBBK/S1S/proprietary/vendor/app/MTKLogger/MTKLogger.apk
-LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/app
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/app/MTKLogger
 include $(BUILD_PREBUILT)
 
 include $(CLEAR_VARS)
@@ -63,6 +65,5 @@ LOCAL_MODULE       := MTKThermalManager
 LOCAL_MODULE_TAGS  := optional
 LOCAL_MODULE_CLASS := ETC
 LOCAL_SRC_FILES    := ../../../../vendor/EEBBK/S1S/proprietary/vendor/app/MTKThermalManager/MTKThermalManager.apk
-LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/app
+LOCAL_MODULE_PATH  := $(TARGET_OUT_VENDOR)/app/MTKThermalManager
 include $(BUILD_PREBUILT)
-
