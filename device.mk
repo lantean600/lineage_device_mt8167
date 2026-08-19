@@ -20,34 +20,36 @@ PRODUCT_ENFORCE_RRO_TARGETS := *
 PRODUCT_CHARACTERISTICS := tablet
 
 # Rootdir
+# Init/ueventd modules provided by rootdir/Android.mk
 PRODUCT_PACKAGES += \
-
-PRODUCT_PACKAGES += \
-    fstab.mt8167 \
-    factory_init.connectivity.rc \
-    factory_init.project.rc \
-    factory_init.rc \
-    init.aee.rc \
-    init.common_svc.rc \
-    init.connectivity.rc \
-    init.environ.rc \
-    init.modem.rc \
-    init.mt8167.rc \
-    init.mt8167.usb.rc \
-    init.project.rc \
-    init.rilproxy.rc \
-    init.sensor_1_0.rc \
-    init.usb.configfs.rc \
-    init.usb.rc \
-    meta_init.connectivity.rc \
-    meta_init.modem.rc \
-    meta_init.project.rc \
-    meta_init.rc \
-    multi_init.rc \
     init.rc \
     init.recovery.mt8167.rc \
     ueventd.rc \
-    ueventd.mt8167.rc \
+    ueventd.mt8167.rc
+
+# Vendor init scripts + fstab (converted from prebuilt_etc for LOS16/Android9 compat)
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/rootdir/etc/factory_init.connectivity.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/factory_init.connectivity.rc \
+    $(LOCAL_PATH)/rootdir/etc/factory_init.project.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/factory_init.project.rc \
+    $(LOCAL_PATH)/rootdir/etc/factory_init.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/factory_init.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.aee.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.aee.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.common_svc.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.common_svc.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.connectivity.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.connectivity.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.environ.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.environ.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.modem.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.modem.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.mt8167.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.mt8167.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.mt8167.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.mt8167.usb.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.project.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.project.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.rilproxy.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.rilproxy.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.sensor_1_0.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.sensor_1_0.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.usb.configfs.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.usb.configfs.rc \
+    $(LOCAL_PATH)/rootdir/etc/init.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.usb.rc \
+    $(LOCAL_PATH)/rootdir/etc/meta_init.connectivity.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/meta_init.connectivity.rc \
+    $(LOCAL_PATH)/rootdir/etc/meta_init.modem.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/meta_init.modem.rc \
+    $(LOCAL_PATH)/rootdir/etc/meta_init.project.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/meta_init.project.rc \
+    $(LOCAL_PATH)/rootdir/etc/meta_init.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/meta_init.rc \
+    $(LOCAL_PATH)/rootdir/etc/multi_init.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/multi_init.rc \
+    $(LOCAL_PATH)/rootdir/etc/fstab.mt8167:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.mt8167 \
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
