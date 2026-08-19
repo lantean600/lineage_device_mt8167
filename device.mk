@@ -20,11 +20,9 @@ PRODUCT_ENFORCE_RRO_TARGETS := *
 PRODUCT_CHARACTERISTICS := tablet
 
 # Rootdir
-# Init/ueventd modules provided by rootdir/Android.mk
+# Init/ueventd modules provided by rootdir/Android.mk (MTK-specific)
 PRODUCT_PACKAGES += \
-    init.rc \
     init.recovery.mt8167.rc \
-    ueventd.rc \
     ueventd.mt8167.rc
 
 # Vendor init scripts + fstab (converted from prebuilt_etc for LOS16/Android9 compat)
