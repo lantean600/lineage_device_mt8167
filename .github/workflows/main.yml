@@ -105,7 +105,20 @@ jobs:
         mkdir lineage
         cd lineage
         repo init -u ${{ github.event.inputs.SYNC_URL }} -b ${{ github.event.inputs.MANIFEST_BRANCH }} --depth=1
-        repo sync -c -j16
+        git config --global http.maxRequests 2
+        sync_ok=false
+        for attempt in 1 2 3 4; do
+          echo "repo sync attempt ${attempt}/4"
+          if repo sync -c -j4 --fail-fast --retry-fetches=3; then
+            sync_ok=true
+            break
+          fi
+          sleep $((attempt * 30))
+        done
+        if [ "$sync_ok" != true ]; then
+          echo "repo sync failed after 4 attempts"
+          exit 1
+        fi
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Clone device tree
