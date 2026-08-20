@@ -86,7 +86,7 @@ jobs:
         mkdir ${{ steps.pwd.outputs.workspace-folder }}/ccache
         export USE_CCACHE=1
         export CCACHE_DIR=${{ steps.pwd.outputs.workspace-folder }}/ccache/
-        ccache -M 50G
+        ccache -M 10G
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       continue-on-error: true
 
@@ -116,7 +116,7 @@ jobs:
         # Merge proprietary blobs from gitee mirror (VENDOR_BLOBS_URL hosts patched mks only)
         git clone https://gitee.com/xinkontans/android_vendor_EEBBK_S1S.git -b cm-14.1 /tmp/vendor_full || true
         if [ -d /tmp/vendor_full/proprietary ]; then cp -r /tmp/vendor_full/proprietary ./${{ github.event.inputs.VENDOR_PATH }}/; echo "proprietary merged"; fi
-        # LOS16 manifest comments out prebuilts/lineage-sdk, but checkpublicapi needs it
+        rm -rf /tmp/vendor_full`n        # LOS16 manifest comments out prebuilts/lineage-sdk, but checkpublicapi needs it
         git clone -b lineage-16.0 --depth 1 https://github.com/LineageOS/android_prebuilts_lineage-sdk.git prebuilts/lineage-sdk || true
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
@@ -148,7 +148,16 @@ jobs:
         . build/envsetup.sh
         export USE_CCACHE=1
         export CCACHE_DIR=ccache/
-        ccache -M 50G
+        ccache -M 10G
+        sudo apt-get clean || true
+        rm -rf /home/runner/.cache/* || true
+        echo "Disk after cleanup:"
+        df -h .
+        available_kb=$(df --output=avail . | tail -1)
+        if [ "$available_kb" -lt 20971520 ]; then
+          echo "Insufficient disk space before compile: ${available_kb} KB available"
+          exit 1
+        fi
         echo "Build diagnostics before compile:"
         nproc
         free -h
