@@ -149,8 +149,19 @@ jobs:
         export USE_CCACHE=1
         export CCACHE_DIR=ccache/
         ccache -M 50G
+        echo "Build diagnostics before compile:"
+        nproc
+        free -h
+        df -h .
         lunch ${{ github.event.inputs.MAKEFILE_NAME }}
-        m -j16
+        set +e
+        set -o pipefail
+        m -j4 2>&1 | tee "${{ steps.pwd.outputs.workspace-folder }}/build.log"
+        build_status=${PIPESTATUS[0]}
+        echo "Build diagnostics after compile:"
+        free -h
+        df -h .
+        exit "$build_status"
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       continue-on-error: true
 
