@@ -134,6 +134,53 @@ jobs:
         git clone -b lineage-16.0 --depth 1 https://github.com/LineageOS/android_prebuilts_lineage-sdk.git prebuilts/lineage-sdk || true
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
+    - name: Patch LOS16 lineage-sdk Make compatibility variables
+      run: |
+        cd ${{ steps.pwd.outputs.workspace-folder }}/lineage
+        python3 - <<'PY'
+        from pathlib import Path
+
+        path = Path('lineage-sdk/Android.mk')
+        text = path.read_text()
+        backslash = chr(92)
+        marker = 'lineage_stub_packages := ' + backslash + '\n    lineageos.platform'
+        patch = '\n'.join([
+            'lineage_sdk_src := sdk/src/java/lineageos',
+            'lineage_sdk_internal_src := sdk/src/java/org/lineageos/internal',
+            'library_src := lineage/lib/main/java',
+            '',
+            'lineage_sdk_LOCAL_JAVA_LIBRARIES := ' + backslash,
+            '    android-support-annotations ' + backslash,
+            '    android-support-v7-preference ' + backslash,
+            '    android-support-v7-recyclerview ' + backslash,
+            '    android-support-v14-preference',
+            '',
+            'lineage_platform_LOCAL_INTERMEDIATE_SOURCES := ' + backslash,
+            '    $(lineage_platform_res)/lineageos/platform/R.java ' + backslash,
+            '    $(lineage_platform_res)/lineageos/platform/Manifest.java ' + backslash,
+            '    $(lineage_platform_res)/org/lineageos/platform/internal/R.java',
+            '',
+            'lineage_sdk_LOCAL_INTERMEDIATE_SOURCES := ' + backslash,
+            '    $(lineage_platform_res)/lineageos/platform/R.java ' + backslash,
+            '    $(lineage_platform_res)/lineageos/platform/Manifest.java',
+        ])
+        if 'lineage_sdk_src := sdk/src/java/lineageos' in text:
+            print('Make compatibility variables already present')
+        elif marker not in text:
+            raise SystemExit('lineage-sdk Android.mk marker not found')
+        else:
+            text = text.replace(marker, marker + '\n\n' + patch.rstrip(), 1)
+            path.write_text(text)
+            print('Restored lineage-sdk Make compatibility variables')
+        print('--- compatibility block ---')
+        lines = path.read_text().splitlines()
+        for i, line in enumerate(lines):
+            if line.startswith('lineage_sdk_src :='):
+                print('\n'.join(lines[i:i+18]))
+                break
+        PY
+      working-directory: ${{ steps.pwd.outputs.workspace-folder }}
+
     - name: Repair WebView prebuilts
       run: |
         cd ${{ steps.pwd.outputs.workspace-folder }}/lineage
@@ -221,3 +268,4 @@ jobs:
       continue-on-error: true
         
 # trigger rescan
+
