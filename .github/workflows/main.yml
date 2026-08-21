@@ -143,7 +143,7 @@ jobs:
         path = Path('lineage-sdk/Android.mk')
         text = path.read_text()
         backslash = chr(92)
-        marker = 'lineage_stub_packages := ' + backslash + '\n    lineageos.platform'
+        needle = 'lineage_platform_res := APPS/org.lineageos.platform-res_intermediates/aapt\n'
         patch = '\n'.join([
             'lineage_sdk_src := sdk/src/java/lineageos',
             'lineage_sdk_internal_src := sdk/src/java/org/lineageos/internal',
@@ -166,10 +166,10 @@ jobs:
         ])
         if 'lineage_sdk_src := sdk/src/java/lineageos' in text:
             print('Make compatibility variables already present')
-        elif marker not in text:
-            raise SystemExit('lineage-sdk Android.mk marker not found')
+        elif needle not in text:
+            raise SystemExit('lineage-sdk Android.mk needle not found')
         else:
-            text = text.replace(marker, marker + '\n\n' + patch.rstrip(), 1)
+            text = text.replace(needle, needle + '\n' + patch.rstrip() + '\n', 1)
             path.write_text(text)
             print('Restored lineage-sdk Make compatibility variables')
         print('--- compatibility block ---')
@@ -268,4 +268,5 @@ jobs:
       continue-on-error: true
         
 # trigger rescan
+
 
