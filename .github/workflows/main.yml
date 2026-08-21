@@ -86,7 +86,7 @@ jobs:
         mkdir ${{ steps.pwd.outputs.workspace-folder }}/ccache
         export USE_CCACHE=1
         export CCACHE_DIR=${{ steps.pwd.outputs.workspace-folder }}/ccache/
-        ccache -M 10G
+        ccache -M 1G
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       continue-on-error: true
 
@@ -162,7 +162,7 @@ jobs:
         . build/envsetup.sh
         export USE_CCACHE=1
         export CCACHE_DIR=ccache/
-        ccache -M 10G
+        ccache -M 1G
         sudo apt-get clean || true
         rm -rf /home/runner/.cache/* || true
         echo "Disk after cleanup:"
@@ -172,6 +172,11 @@ jobs:
           echo "Insufficient disk space before compile: ${available_kb} KB available"
           exit 1
         fi
+        export USE_CCACHE=0
+        rm -rf ccache
+        sudo rm -rf /root/.cache/* /home/runner/.cache/* /var/cache/apt/* || true
+        echo "Disk after ccache cleanup:"
+        df -h .
         echo "Build diagnostics before compile:"
         nproc
         free -h
@@ -179,8 +184,8 @@ jobs:
         lunch ${{ github.event.inputs.MAKEFILE_NAME }}
         set +e
         set -o pipefail
-        m -j4 2>&1 | tee "${{ steps.pwd.outputs.workspace-folder }}/build.log"
-        build_status=${PIPESTATUS[0]}
+        m -j4
+        build_status=$?
         echo "Build diagnostics after compile:"
         free -h
         df -h .
