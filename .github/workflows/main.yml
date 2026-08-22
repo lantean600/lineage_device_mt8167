@@ -154,15 +154,6 @@ jobs:
             '    android-support-v7-preference ' + backslash,
             '    android-support-v7-recyclerview ' + backslash,
             '    android-support-v14-preference',
-            '',
-            'lineage_platform_LOCAL_INTERMEDIATE_SOURCES := ' + backslash,
-            '    $(lineage_platform_res)/lineageos/platform/R.java ' + backslash,
-            '    $(lineage_platform_res)/lineageos/platform/Manifest.java ' + backslash,
-            '    $(lineage_platform_res)/org/lineageos/platform/internal/R.java',
-            '',
-            'lineage_sdk_LOCAL_INTERMEDIATE_SOURCES := ' + backslash,
-            '    $(lineage_platform_res)/lineageos/platform/R.java ' + backslash,
-            '    $(lineage_platform_res)/lineageos/platform/Manifest.java',
         ])
         if 'lineage_sdk_src := sdk/src/java/lineageos' in text:
             print('Make compatibility variables already present')
