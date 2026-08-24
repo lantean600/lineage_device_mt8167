@@ -229,7 +229,7 @@ jobs:
         echo "Lineage API compatibility gate disabled for unofficial device build; droiddoc generation remains enabled."
         set +e
         set -o pipefail
-        m -j4
+        m bacon -j4
         build_status=$?
         echo "Build diagnostics after compile:"
         free -h
