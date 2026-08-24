@@ -225,6 +225,8 @@ jobs:
         free -h
         df -h .
         lunch ${{ github.event.inputs.MAKEFILE_NAME }}
+        export WITHOUT_CHECK_API=true
+        echo "Lineage API compatibility gate disabled for unofficial device build; droiddoc generation remains enabled."
         set +e
         set -o pipefail
         m -j4
