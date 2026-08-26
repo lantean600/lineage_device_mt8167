@@ -145,7 +145,8 @@ jobs:
         echo "Jack security file: $JACK_SECURITY_FILE"
         grep -n 'jdk.tls.disabledAlgorithms' "$JACK_SECURITY_FILE" | head -n 2
         # 修复 Jack Server（setup-java 提供 JDK8；跳过脆弱的 keytool jks 转换）
-        prebuilts/sdk/tools/jack-admin kill-server 2>/dev/null || true`r`n        rm -rf ~/.jack-server ~/.jack-settings || true
+        prebuilts/sdk/tools/jack-admin kill-server 2>/dev/null || true
+        rm -rf ~/.jack-server ~/.jack-settings || true
         prebuilts/sdk/tools/jack-admin install-server \
         prebuilts/sdk/tools/jack-launcher.jar \
         prebuilts/sdk/tools/jack-server-4.8.ALPHA.jar || true
@@ -157,6 +158,11 @@ jobs:
         export CCACHE_DIR=ccache/
         ccache -M 50G
         lunch ${{ github.event.inputs.MAKEFILE_NAME }}
+        # Android 7.1 legacy make can miss this resource dependency under parallel graph generation.
+        # Build exported platform resources first, then verify both generated Java files.
+        m -j1 org.cyanogenmod.platform-res
+        test -f out/target/common/obj/APPS/org.cyanogenmod.platform-res_intermediates/src/cyanogenmod/platform/R.java
+        test -f out/target/common/obj/APPS/org.cyanogenmod.platform-res_intermediates/src/cyanogenmod/platform/Manifest.java
         m bacon -j4
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       continue-on-error: true
