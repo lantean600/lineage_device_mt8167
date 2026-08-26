@@ -144,7 +144,7 @@ jobs:
         export CCACHE_DIR=ccache/
         ccache -M 50G
         lunch ${{ github.event.inputs.MAKEFILE_NAME }}
-        m -j16
+        m bacon -j4
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
       continue-on-error: true
 
@@ -168,6 +168,6 @@ jobs:
           Target: ${{ github.event.inputs.BUILD_TARGET }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      continue-on-error: true
+      continue-on-error: false
         
 # trigger rescan
