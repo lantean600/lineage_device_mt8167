@@ -43,7 +43,7 @@ on:
       MAKEFILE_NAME:
         description: 'MAKEFILE_NAME'
         required: true
-        default: 'S1S-userdebug'
+        default: 'lineage_S1S-userdebug'
 
 jobs:
   build-lineageos:
@@ -113,6 +113,10 @@ jobs:
         cd ${{ steps.pwd.outputs.workspace-folder }}/lineage/
         git clone ${{ github.event.inputs.DEVICE_TREE_URL }} -b ${{ github.event.inputs.DEVICE_TREE_BRANCH }} ./${{ github.event.inputs.DEVICE_PATH }}
         git clone ${{ github.event.inputs.VENDOR_BLOBS_URL }} -b ${{ github.event.inputs.VENDOR_BRANCH }} ./${{ github.event.inputs.VENDOR_PATH }}
+        # The current Gitee master tree still references the pre-rename full_S1S.mk.
+        # Align AndroidProducts.mk with the actual lineage_S1S.mk and vendorsetup.sh.
+        sed -i 's#full_S1S.mk#lineage_S1S.mk#g; s#full_S1S-#lineage_S1S-#g' ./${{ github.event.inputs.DEVICE_PATH }}/AndroidProducts.mk
+        grep -q 'lineage_S1S.mk' ./${{ github.event.inputs.DEVICE_PATH }}/AndroidProducts.mk
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Set Swap Space
