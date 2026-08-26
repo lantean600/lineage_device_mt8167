@@ -77,6 +77,7 @@ jobs:
     - name: Prepare the build environment
       run: |
         sudo apt install git aria2 -y
+        sudo apt install git-lfs -y
         git clone https://gitlab.com/OrangeFox/misc/scripts
         cd scripts
         sudo bash setup/android_build_env.sh
@@ -106,6 +107,13 @@ jobs:
         cd lineage
         repo init -u ${{ github.event.inputs.SYNC_URL }} -b ${{ github.event.inputs.MANIFEST_BRANCH }} --depth=1
         repo sync -c -j16
+        # The Chromium WebView prebuilts are Git LFS objects; fetch them before the build.
+        git lfs install
+        for d in external/chromium-webview/prebuilt/arm external/chromium-webview/prebuilt/arm64; do
+          if [ -d "$d" ]; then git -C "$d" lfs pull; fi
+        done
+        test "$(stat -c%s external/chromium-webview/prebuilt/arm64/webview.apk)" -gt 1000000
+        unzip -t external/chromium-webview/prebuilt/arm64/webview.apk >/dev/null
       working-directory: ${{ steps.pwd.outputs.workspace-folder }}
 
     - name: Clone device tree
