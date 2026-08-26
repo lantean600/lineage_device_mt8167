@@ -135,8 +135,17 @@ jobs:
     - name: Build Lineage ROM
       run: |
         cd ${{ steps.pwd.outputs.workspace-folder }}/lineage/
+        # Jack 4.8 uses TLS versions disabled by newer JDK 8 security defaults.
+        JACK_SECURITY_FILE="$(find "$JAVA_HOME" -path '*/security/java.security' -type f -print -quit)"
+        if [ -z "$JACK_SECURITY_FILE" ]; then
+          echo "JDK security configuration not found"
+          exit 1
+        fi
+        sudo perl -0pi -e 's/TLSv1,\s*TLSv1\.1,\s*//g; s/TLSv1,\s*TLSv1\.1//g' "$JACK_SECURITY_FILE"
+        echo "Jack security file: $JACK_SECURITY_FILE"
+        grep -n 'jdk.tls.disabledAlgorithms' "$JACK_SECURITY_FILE" | head -n 2
         # 修复 Jack Server（setup-java 提供 JDK8；跳过脆弱的 keytool jks 转换）
-        rm -rf ~/.jack-server || true
+        prebuilts/sdk/tools/jack-admin kill-server 2>/dev/null || true`r`n        rm -rf ~/.jack-server ~/.jack-settings || true
         prebuilts/sdk/tools/jack-admin install-server \
         prebuilts/sdk/tools/jack-launcher.jar \
         prebuilts/sdk/tools/jack-server-4.8.ALPHA.jar || true
